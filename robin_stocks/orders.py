@@ -600,68 +600,68 @@ def order_buy_stop_limit(symbol, quantity, limitPrice, stopPrice, timeInForce='g
 
     return(data)
 
-# @helper.login_required
-# def order_buy_trailing_stop(symbol, quantity, trailAmount, trailType='percentage', timeInForce='gtc', extendedHours=False):
-#     """Submits a stop order to be turned into a limit order once a certain stop price is reached.
-#
-#     :returns: Dictionary that contains information regarding the purchase of stocks, \
-#     such as the order id, the state of order (queued, confired, filled, failed, canceled, etc.), \
-#     the price, and the quantity.
-#
-#     """
-#     try:
-#         symbol = symbol.upper().strip()
-#         trailAmount = float(trailAmount)
-#     except AttributeError as message:
-#         print(message)
-#         return None
-#
-#     stock_price = helper.round_price(stocks.get_latest_price(symbol, extendedHours)[0])
-#     percentage = 0
-#
-#     print('stock price is ', stock_price)
-#
-#     try:
-#         if trailType == 'amount':
-#             stopPrice = stock_price + trailAmount
-#         else:
-#             stopPrice = stock_price + (stock_price * trailAmount * 0.01)
-#             percentage = trailAmount
-#     except Exception as e:
-#         print('ERROR: {}'.format(e))
-#         stopPrice = 0
-#
-#     stopPrice = helper.round_price(stopPrice)
-#     print('percentage is ', percentage)
-#     print('stop price is ', stopPrice)
-#
-#     payload = {
-#         'account': profiles.load_account_profile(info='url'),
-#         'instrument': stocks.get_instruments_by_symbols(symbol, info='url')[0],
-#         'symbol': symbol,
-#         'price': stock_price,
-#         'quantity': quantity,
-#         'ref_id': str(uuid4()),
-#         'type': 'market',
-#         'stop_price': stopPrice,
-#         'time_in_force': timeInForce,
-#         'trigger': 'stop',
-#         'side': 'buy',
-#         'extended_hours': extendedHours
-#     }
-#
-#     if trailType == 'amount':
-#         payload['trailing_peg'] = {'type': 'price', 'price': {'amount': trailAmount, 'currency_code': 'USD'}}
-#     else:
-#         payload['trailing_peg'] = {'type': 'percentage', 'percentage': str(percentage) }
-#
-#     for item, key in payload.items():
-#         print(item, key)
-#
-#     url = urls.orders()
-#     data = helper.request_post(url, payload)
-#
-#     return(data)
+@helper.login_required
+def order_buy_trailing_stop(symbol, quantity, trailAmount, trailType='percentage', timeInForce='gtc', extendedHours=False):
+    """Submits a stop order to be turned into a limit order once a certain stop price is reached.
+
+    :returns: Dictionary that contains information regarding the purchase of stocks, \
+    such as the order id, the state of order (queued, confired, filled, failed, canceled, etc.), \
+    the price, and the quantity.
+
+    """
+    try:
+        symbol = symbol.upper().strip()
+        trailAmount = float(trailAmount)
+    except AttributeError as message:
+        print(message)
+        return None
+
+    stock_price = helper.round_price(stocks.get_latest_price(symbol, extendedHours)[0])
+    percentage = 0
+
+    print('stock price is ', stock_price)
+
+    try:
+        if trailType == 'amount':
+            stopPrice = stock_price + trailAmount
+        else:
+            stopPrice = stock_price + (stock_price * trailAmount * 0.01)
+            percentage = trailAmount
+    except Exception as e:
+        print('ERROR: {}'.format(e))
+        stopPrice = 0
+
+    stopPrice = helper.round_price(stopPrice)
+    print('percentage is ', percentage)
+    print('stop price is ', stopPrice)
+
+    payload = {
+        'account': profiles.load_account_profile(info='url'),
+        'instrument': stocks.get_instruments_by_symbols(symbol, info='url')[0],
+        'symbol': symbol,
+        'price': stock_price,
+        'quantity': quantity,
+        'ref_id': str(uuid4()),
+        'type': 'market',
+        'stop_price': stopPrice,
+        'time_in_force': timeInForce,
+        'trigger': 'stop',
+        'side': 'buy',
+        'extended_hours': extendedHours
+    }
+
+    if trailType == 'amount':
+        payload['trailing_peg'] = {'type': 'price', 'price': {'amount': trailAmount, 'currency_code': 'USD'}}
+    else:
+        payload['trailing_peg'] = {'type': 'percentage', 'percentage': str(percentage) }
+
+    for item, key in payload.items():
+        print(item, key)
+
+    url = urls.orders()
+    data = helper.request_post(url, payload)
+
+    return(data)
 
 
 @helper.login_required

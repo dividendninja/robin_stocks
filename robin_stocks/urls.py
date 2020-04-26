@@ -73,7 +73,10 @@ def quotes():
 
 
 def ratings(symbol):
-    return('https://api.robinhood.com/midlands/ratings/{0}/'.format(id_for_stock(symbol)))
+    return('https://api.robinhood.com/midlands/ratings/{}/'.format(id_for_stock(symbol)))
+
+def ratings_gold(symbol):
+    return('https://api.robinhood.com/midlands/ratings/{}/overview/'.format(id_for_stock(symbol)))
 
 
 def splits(symbol):

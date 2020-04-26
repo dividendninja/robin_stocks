@@ -224,8 +224,36 @@ def get_ratings(symbol, info=None):
 
     return(helper.filter(data, info))
 
-@helper.convert_none_to_string
-def get_popularity(symbol, info=None):
+def get_ratings_gold(symbol,info=None):
+    """Returns the ratings for a stock, including the number of buy, hold, and sell ratings.
+
+    :param symbol: The stock ticker.
+    :type symbol: str
+    :param info: Will filter the results to contain a dictionary of values that correspond to the key that matches info. \
+    Possible values are summary, ratings, and instrument_id
+    :type info: Optional[str]
+    :returns: If info parameter is left as None then the list will contain a dictionary of key/value pairs for each ticker. \
+    Otherwise, it will contain the values that correspond to the keyword that matches info. In this case, \
+    the value will also be a dictionary.
+
+    """
+
+    try:
+        symbol = symbol.upper().strip()
+    except AttributeError as message:
+        print(message)
+        return None
+
+    url = urls.ratings_gold(symbol)
+    try:
+        data = helper.request_get(url)
+        return data
+    except:
+        print("Not Found")
+        pass
+
+
+def get_popularity(symbol,info=None):
     """Returns the number of open positions.
 
     :param symbol: The stock ticker.
